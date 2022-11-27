@@ -1,5 +1,4 @@
 "use strict";
-import countyGeoJsonFeature from "./USA_Counties_Generalized.json" assert {type: "json"};
 
 var map = L.map('map').setView({lat: 39.50, lng: -98.35}, 5);
 
@@ -123,7 +122,11 @@ function onEachFeature(feature, layer) {
 	layer.bindPopup(feature.properties.STATE_NAME + " - " + feature.properties.NAME + " - " + Number.parseInt(feature.properties.POPULATION).toLocaleString());
 }
 
-geojson = L.geoJSON(countyGeoJsonFeature, {
-	style: countyLayerStyle,
-	onEachFeature: onEachFeature
-}).addTo(map);
+fetch("./USA_Counties_Generalized.json")
+	.then((response) => response.json())
+	.then((countyGeoJsonFeature) => {
+		geojson = L.geoJSON(countyGeoJsonFeature, {
+			style: countyLayerStyle,
+			onEachFeature: onEachFeature
+		}).addTo(map);
+	});
